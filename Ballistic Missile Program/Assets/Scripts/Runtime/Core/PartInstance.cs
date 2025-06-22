@@ -14,7 +14,8 @@ public class PartInstance : MonoBehaviour {
     // Design-time Data
     public PartDefinition definition; // set by the spawner
 
-    [HideInInspector] public AttachNode parentAttachPoint; // null when root
+    [HideInInspector] public AttachNode parentAttachNode; // null when root
+    [HideInInspector] public AttachNode childAttachNode; // null when not used
     private AttachNode[] _localAttachNodes;
 
     // Public read-only properties
@@ -41,20 +42,24 @@ public class PartInstance : MonoBehaviour {
     // Attach this part to a parent node (called by builder/decoupler).
     // Child node is the one used on this part
     public void AttachTo(AttachNode parentNode, AttachNode childNode) {
-        parentAttachPoint = parentNode;
+        parentAttachNode = parentNode;
         parentNode.CurrentOccupant = this;
+        childAttachNode = childNode;
         childNode.CurrentOccupant = this;
         transform.SetParent(parentNode.transform, worldPositionStays: false);
         transform.SetLocalPositionAndRotation(-childNode.transform.localPosition, Quaternion.identity); // Local position and rotation
     }
 
     // Detach from current parent node (if any).
+    // Careful using this you need a new VehicleInstance
     public void Detach() {
-        if (parentAttachPoint == null) return;
+        if (parentAttachNode == null) return;
 
-        parentAttachPoint.CurrentOccupant = null;
-        parentAttachPoint = null;
-        transform.SetParent(null, worldPositionStays: true); // now root
+        parentAttachNode.CurrentOccupant = null;
+        childAttachNode.CurrentOccupant = null;
+        parentAttachNode = null;
+        childAttachNode = null;
+        transform.SetParent(null, worldPositionStays: true); // new root
     }
 
     #endregion

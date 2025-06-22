@@ -1,47 +1,57 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DecoupleBehaviour : MonoBehaviour {
-    /// <summary>Consumes all parts whose stageIndex == CurrentStageIndex,
-    /// spawns a new VehicleInstance for them, and bumps CurrentStageIndex.</summary>
-    /*public VehicleInstance DecoupleCurrentStage(float separationImpulse = 0f) {
-        // 1. Find departing parts
-        var departing = Parts.Where(p => p.stageIndex == CurrentStageIndex).ToList();
-        if (departing.Count == 0) { CurrentStageIndex++; return null; } // nothing to shed
+    [SerializeField] private float decoupleImpulse;
 
-        // 2. Create new root GO
-        var newRoot = new GameObject($"Vehicle_Stage{CurrentStageIndex}");
-        newRoot.transform.SetPositionAndRotation(transform.position, transform.rotation);
+    [SerializeField] private bool decouple;
+    [SerializeField] private bool decoupled = false;
 
-        // 3. Move parts under new root
-        foreach (var part in departing)
-            part.transform.SetParent(newRoot.transform, true);
-
-        // 4. Add VehicleInstance + Rigidbody
-        var vi = newRoot.AddComponent<VehicleInstance>();
-        var rb = newRoot.AddComponent<Rigidbody>();       // compound from colliders
-
-        vi.Parts.AddRange(departing);
-        vi.blueprintGuid = blueprintGuid;
-        vi.CurrentStageIndex = CurrentStageIndex;            // 'spent' stage index
-        vi._rb = rb;
-        vi.RecalculateMass();
-
-        // 5. Clean up original vehicle
-        Parts.RemoveAll(p => departing.Contains(p));
-        CurrentStageIndex++;
-        MarkMassDirty();   // update mass for the remaining core
-
-        // 6. Give both stacks their inherited momentum
-        rb.linearVelocity = _rb.linearVelocity;
-        rb.angularVelocity = _rb.angularVelocity;
-
-        // 7. Separation impulse (optional)
-        if (separationImpulse != 0f) {
-            Vector3 dir = -transform.forward;   // tweak as desired
-            _rb.AddForce(dir * separationImpulse, ForceMode.Impulse);
-            rb.AddForce(-dir * separationImpulse, ForceMode.Impulse);
+    private void Update() {
+        if (decouple && !decoupled) {
+            Decouple();
+            decoupled = true;
         }
+    }
 
-        return vi;    // caller can register it with game-manager if needed
-    }*/
+    public void Decouple() {
+        PartInstance pi = GetComponent<PartInstance>();
+        VehicleInstance viParent = GetVehicleInstanceOfPart(pi);
+        Rigidbody rbParent = viParent.GetComponent<Rigidbody>();
+
+        Vector3 contactPoint = transform.position;
+        Vector3 impulseDir = transform.up;
+        Debug.Log(impulseDir);
+
+        pi.Detach();
+
+        VehicleInstance viChild = FindObjectOfType<VehicleSpawner>().MakeNewParent(pi);
+        Rigidbody rbChild = viChild.GetComponent<Rigidbody>();
+
+        viParent.UpdateParts();
+        viChild.UpdateParts();
+
+        viParent.RecalculateMass();
+        viChild.RecalculateMass();
+
+        // Copy velocity to new object
+        rbChild.velocity = rbParent.velocity;
+
+        if (decoupleImpulse > 0f) {
+            rbParent.AddForceAtPosition(impulseDir * decoupleImpulse, contactPoint, ForceMode.Impulse);
+            rbChild.AddForceAtPosition(-impulseDir * decoupleImpulse, contactPoint, ForceMode.Impulse);
+        }
+    }
+
+    private VehicleInstance GetVehicleInstanceOfPart(PartInstance pi) {
+        Transform parent = transform; // Start with current transform
+        while (parent.parent != null) {
+            parent = parent.parent;
+            if (parent.GetComponent<VehicleInstance>() != null) {
+                return parent.GetComponent<VehicleInstance>();
+            }
+        }
+        Debug.LogWarning($"Could not find Vehicle Instance of part {pi.name}. {pi.gameObject}");
+        return null;
+    }
 }

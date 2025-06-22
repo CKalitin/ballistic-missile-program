@@ -30,6 +30,8 @@ public class VehicleInstance : MonoBehaviour {
 
         vehicleGuid = Guid.NewGuid().ToString();
 
+        UpdateParts();
+
         RecalculateMass();
     }
 
@@ -55,7 +57,7 @@ public class VehicleInstance : MonoBehaviour {
         for (int i = 0; i < Parts.Count; i++) {
             float mass = Parts[i].CurrentMassKg;
             totalMass += mass;
-            worldCoM = mass * Parts[i].transform.position;
+            worldCoM += mass * Parts[i].transform.position;
         }
 
         if (totalMass <= 0f) totalMass = 1f; // Avoid NaN values
@@ -69,9 +71,20 @@ public class VehicleInstance : MonoBehaviour {
         _massDirty = false;
     }
 
+    public void UpdateParts() {
+        Parts.Clear();
+
+        PartInstance[] foundParts = GetComponentsInChildren<PartInstance>();
+
+        for (int i = 0; i < foundParts.Length; i++) {
+            Parts.Add(foundParts[i]);
+        }
+    }
+
     #endregion
 
     #if UNITY_EDITOR
+
     /* Scene-view gizmo: yellow cross at the centre-of-mass */
     private void OnDrawGizmosSelected() {
         if (!_rb) _rb = GetComponent<Rigidbody>();
@@ -79,10 +92,11 @@ public class VehicleInstance : MonoBehaviour {
         Gizmos.color = Color.yellow;
         Vector3 com = transform.TransformPoint(_rb.centerOfMass);
 
-        float scale = 0.5f;
+        float scale = 5f;
         Gizmos.DrawLine(com - Vector3.up * scale, com + Vector3.up * scale);
         Gizmos.DrawLine(com - Vector3.right * scale, com + Vector3.right * scale);
         Gizmos.DrawLine(com - Vector3.forward * scale, com + Vector3.forward * scale);
     }
+
     #endif
 }

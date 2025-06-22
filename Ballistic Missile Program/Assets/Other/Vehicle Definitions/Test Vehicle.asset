@@ -28,3 +28,15 @@ MonoBehaviour:
     parentIndex: 1
     ParentAttachNodeID: Lower
     ChildAttachNodeID: Upper
+  - PartDefinition: {fileID: 11400000, guid: 905bad57c3f75d549b760d636a29d469, type: 2}
+    parentIndex: 0
+    ParentAttachNodeID: Side
+    ChildAttachNodeID: Lower
+  - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
+    parentIndex: 3
+    ParentAttachNodeID: Upper
+    ChildAttachNodeID: Lower
+  - PartDefinition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
+    parentIndex: 2
+    ParentAttachNodeID: Lower
+    ChildAttachNodeID: Upper

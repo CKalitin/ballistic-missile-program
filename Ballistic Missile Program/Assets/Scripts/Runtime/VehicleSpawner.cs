@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 /// Static helper that turns a VehicleBlueprint into a ready-to-fly VehicleInstance.
 public class VehicleSpawner :MonoBehaviour {
@@ -8,7 +9,6 @@ public class VehicleSpawner :MonoBehaviour {
 
     public VehicleInstance Build(VehicleBlueprint bp, Vector3 position, Quaternion rotation, Transform parent = null) {
         GameObject rootGO = GameObject.Instantiate(defaultVehiclePrefab, position, rotation);
-        rootGO.transform.SetPositionAndRotation(position, rotation);
         if (parent) rootGO.transform.SetParent(parent, worldPositionStays: true); // Keep same world space position and different local position, worldPositionStays
 
         VehicleInstance vehicle = rootGO.AddComponent<VehicleInstance>();
@@ -19,7 +19,6 @@ public class VehicleSpawner :MonoBehaviour {
         {
             GameObject go = GameObject.Instantiate(bp.parts[i].PartDefinition.runtimePrefab, Vector3.zero, Quaternion.identity, rootGO.transform);
             partInstances.Add(go.GetComponent<PartInstance>());
-            vehicle.Parts.Add(partInstances[i]);
         }
 
         for (int i = 0; i < bp.parts.Count; i++)
@@ -40,8 +39,23 @@ public class VehicleSpawner :MonoBehaviour {
             childPI.AttachTo(parentAttachNode, childAttachNode);
         }
 
+        vehicle.UpdateParts();
         vehicle.MarkMassDirty();
         vehicle.RecalculateMass();
+        return vehicle;
+    }
+
+    // Take an existing piece of a vehicle and make it its own parent
+    public VehicleInstance MakeNewParent(PartInstance pi) {
+        Transform t = pi.transform;
+        GameObject go = pi.gameObject;
+
+        GameObject rootGO = GameObject.Instantiate(defaultVehiclePrefab, t.position, t.rotation);
+
+        VehicleInstance vehicle = rootGO.AddComponent<VehicleInstance>();
+
+        t.SetParent(rootGO.transform, worldPositionStays: true);
+
         return vehicle;
     }
 
