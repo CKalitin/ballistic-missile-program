@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guid: 09244084b320439ca4e9caed6483004c
   displayName: Test Vehicle
-  displayDescription: New Vehicle Description
+  displayDescription: Test
   parts:
   - PartDefinition: {fileID: 11400000, guid: c8222536eb6ea6242bf29f15ce65f570, type: 2}
+    parentIndex: -1
     ParentAttachNodeID: 
-    ChildPartDefinitions:
-    - PartDefinition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
-      ParentAttachNodeID: lower
-      ChildPartDefinitions: []
-    - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
-      ParentAttachNodeID: upper
-      ChildPartDefinitions: []
+  - PartDefinition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
+    parentIndex: 0
+    ParentAttachNodeID: Lower
+  - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
+    parentIndex: 1
+    ParentAttachNodeID: Lower

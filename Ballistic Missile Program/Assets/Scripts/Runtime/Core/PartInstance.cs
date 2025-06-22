@@ -43,7 +43,7 @@ public class PartInstance : MonoBehaviour {
         parentAttachPoint = parentNode;
         parentNode.CurrentOccupant = this;
         transform.SetParent(parentNode.transform, worldPositionStays: false);
-        transform.SetLocalPositionAndRotation(transform.parent.position, transform.parent.rotation);
+        transform.SetLocalPositionAndRotation(Vector3.zero-new Vector3(0,-2,0), Quaternion.identity); // Local position and rotation
     }
 
     // Detach from current parent node (if any).

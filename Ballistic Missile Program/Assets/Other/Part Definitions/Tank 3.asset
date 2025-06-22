@@ -15,5 +15,5 @@ MonoBehaviour:
   guid: b6064998-081a-4c67-827f-08c6ecd6800a
   displayName: Tank 1
   category: 2
-  runtimePrefab: {fileID: 8576827954761197865, guid: 0f74a7cda778b6d42980f11cc3c9ba2c, type: 3}
+  runtimePrefab: {fileID: 3644731259552828482, guid: dc3b92e928c8d604c8986a2eaf473b18, type: 3}
   dryMassKg: 500

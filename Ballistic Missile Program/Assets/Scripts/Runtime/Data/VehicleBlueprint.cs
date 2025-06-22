@@ -13,17 +13,18 @@ using UnityEditor;
 #endif
 
 [Serializable]
-public struct PartField {
+public struct PartEntry {
     public PartDefinition PartDefinition;
-    public string ParentAttachNodeID;
     [Space]
-    public PartField[] ChildPartDefinitions;
+    [Tooltip("Index of the parent PartEntry in the parts list, or -1 for the root part.")]
+    public int parentIndex;
+    [Space]
+    public string ParentAttachNodeID;
 
-    public PartField(PartDefinition _partDefinition, string _parentAttachNodeID = "", PartField[] _childPartDefinitions = null) {
+    public PartEntry(PartDefinition _partDefinition, int _parentIndex = -1, string _parentAttachNodeID = "") {
         PartDefinition = _partDefinition;
+        parentIndex = _parentIndex;
         ParentAttachNodeID = _parentAttachNodeID;
-        ChildPartDefinitions = _childPartDefinitions;
-        if (ChildPartDefinitions == null) ChildPartDefinitions = new PartField[0];
     }
 }
 
@@ -39,23 +40,17 @@ public class VehicleBlueprint : ScriptableObject {
     public string displayDescription = "New Vehicle Description";
 
     [Tooltip("Hierarchical list of parts and their attach nodes. Ensure there's only one root.")]
-    public List<PartField> parts = new();
+    public List<PartEntry> parts = new();
 
     /// <summary>Total dry mass of all parts (kg).</summary>
     public float DryMassKg {
         get {
-            if (parts.Count == 0) return 0.0f; // If parts[0] doesn't exist
-            return GetPartFieldDryMass(parts[0]);
+            float total = 0f;
+            for (int i = 0; i < parts.Count; i++) {
+                total += parts[i].PartDefinition.dryMassKg;
+            }
+            return total;
         }
-    }
-
-    private float GetPartFieldDryMass(PartField pf) {
-        float total = pf.PartDefinition.dryMassKg;
-        // Recursively get all parts in the tree
-        for (int i = 0; i < pf.ChildPartDefinitions.Length; i++) {
-            total += GetPartFieldDryMass(pf.ChildPartDefinitions[i]);
-        }
-        return total;
     }
 
     #endregion

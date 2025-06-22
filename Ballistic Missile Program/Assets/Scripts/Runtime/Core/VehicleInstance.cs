@@ -7,11 +7,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-[DisallowMultipleComponent]
+//[RequireComponent(typeof(Rigidbody))] // Note that this adds a rigidbody on instantiation if it doesn't exist
+//[DisallowMultipleComponent]
 public class VehicleInstance : MonoBehaviour {
     #region Variables
 
@@ -49,7 +48,7 @@ public class VehicleInstance : MonoBehaviour {
 
     #region Private Functions
 
-    private void RecalculateMass() {
+    public void RecalculateMass() {
         float totalMass = 0f;
         Vector3 worldCoM = Vector3.zero;
 
@@ -58,6 +57,8 @@ public class VehicleInstance : MonoBehaviour {
             totalMass += mass;
             worldCoM = mass * Parts[i].transform.position;
         }
+
+        if (totalMass <= 0f) totalMass = 1f;
 
         worldCoM /= totalMass; // Normalize for vehicle mass
 
