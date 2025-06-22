@@ -15,14 +15,12 @@ public class VehicleSpawner :MonoBehaviour {
 
         List<PartInstance> partInstances = new List<PartInstance>(bp.parts.Count);
 
-        for (int i = 0; i < bp.parts.Count; i++)
-        {
-            GameObject go = GameObject.Instantiate(bp.parts[i].PartDefinition.runtimePrefab, Vector3.zero, Quaternion.identity, rootGO.transform);
+        for (int i = 0; i < bp.parts.Count; i++) {
+            GameObject go = GameObject.Instantiate(bp.parts[i].PartDefinition.runtimePrefab, position, Quaternion.identity, rootGO.transform);
             partInstances.Add(go.GetComponent<PartInstance>());
         }
 
-        for (int i = 0; i < bp.parts.Count; i++)
-        {
+        for (int i = 0; i < bp.parts.Count; i++) {
             PartEntry pe = bp.parts[i];
 
             if (pe.parentIndex < 0) continue; // Skip root, it already has the right parent

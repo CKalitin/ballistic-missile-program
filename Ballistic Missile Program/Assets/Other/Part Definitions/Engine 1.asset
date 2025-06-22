@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ef0152a03b881c4f9b6c5f6438b868f, type: 3}
-  m_Name: Decoupler
+  m_Name: Engine 1
   m_EditorClassIdentifier: 
   guid: b6064998-081a-4c67-827f-08c6ecd6800a
-  displayName: Decoupler
-  category: 4
-  runtimePrefab: {fileID: 3644731259552828482, guid: c0a2ddd2302b57f4a9342517f67bdd60, type: 3}
+  displayName: Tank 1
+  category: 1
+  runtimePrefab: {fileID: 3644731259552828482, guid: a2b2b4f689a0a5b428e3417b32204847, type: 3}
   partBehavioursDefinitions:
-  - {fileID: 11400000, guid: c2623f46327b27a4eb75a37db099c40c, type: 2}
-  dryMassKg: 50
-  totalMassKg: 50
+  - {fileID: 11400000, guid: 22a6c110ac6621843891a9a596d69f2e, type: 2}
+  dryMassKg: 100
+  totalMassKg: 100

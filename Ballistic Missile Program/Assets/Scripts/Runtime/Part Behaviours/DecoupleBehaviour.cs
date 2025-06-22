@@ -1,11 +1,19 @@
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class DecoupleBehaviour : MonoBehaviour {
+    public DecouplerDefinition def;
+
+    [Tooltip("Defined by Decoupler Definition.")]
     [SerializeField] private float decoupleImpulse;
 
     [SerializeField] private bool decouple;
     [SerializeField] private bool decoupled = false;
+
+    private void Awake() {
+        decoupleImpulse = def.DecoupleImpulse;
+    }
 
     private void Update() {
         if (decouple && !decoupled) {
@@ -20,9 +28,8 @@ public class DecoupleBehaviour : MonoBehaviour {
         if (viParent == null) Debug.LogWarning($"Vehicle Instance Parent Not Found. {gameObject}");
         Rigidbody rbParent = viParent.GetComponent<Rigidbody>();
 
-
         Vector3 contactPoint = transform.position;
-        Vector3 impulseDir = transform.up; // Local up
+        Vector3 impulseDir = -transform.up; // Local down (vertical axis of decoupler)
 
         pi.Detach();
 

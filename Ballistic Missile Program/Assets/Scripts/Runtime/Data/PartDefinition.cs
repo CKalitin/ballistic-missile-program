@@ -1,4 +1,5 @@
 using System;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,7 +20,12 @@ public class PartDefinition : ScriptableObject {
     public PartCategory category;
     public GameObject runtimePrefab;
     [Space]
+    public PartBehaviourDefinition[] partBehavioursDefinitions;
+    [Space]
     public float dryMassKg;
+    [Tooltip("Including Part Behaviours")]
+    [ReadOnly]
+    public float totalMassKg;
 
 #if UNITY_EDITOR
     // This runs whenever the asset is changed or created
@@ -28,6 +34,15 @@ public class PartDefinition : ScriptableObject {
             guid = Guid.NewGuid().ToString(); // 32-char hex
             EditorUtility.SetDirty(this); // Mark asset dirty so Unity saves it
         }
+
+        float mass = dryMassKg;
+        if (partBehavioursDefinitions != null) {
+            for (int i = 0; i < partBehavioursDefinitions.Length; i++) {
+                if (partBehavioursDefinitions[i] == null) continue;
+                mass += partBehavioursDefinitions[i].GetMassContribution();
+            }
+        }
+        totalMassKg = mass;
     }
 #endif
 }

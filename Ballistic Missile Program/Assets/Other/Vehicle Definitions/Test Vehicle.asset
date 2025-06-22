@@ -36,7 +36,7 @@ MonoBehaviour:
     parentIndex: 3
     ParentAttachNodeID: Upper
     ChildAttachNodeID: Lower
-  - PartDefinition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
+  - PartDefinition: {fileID: 11400000, guid: cedc2c7de9c3e0c4090c81dfa712bd26, type: 2}
     parentIndex: 2
     ParentAttachNodeID: Lower
     ChildAttachNodeID: Upper

@@ -36,7 +36,12 @@ public class VehicleInstance : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (_massDirty) RecalculateMass();
+        if (_massDirty) {
+            UpdateParts();
+            RecalculateMass();
+        }
+
+        if (transform.childCount <= 0) Destroy(gameObject);
     }
 
     #endregion
@@ -81,9 +86,31 @@ public class VehicleInstance : MonoBehaviour {
         }
     }
 
+    private void OnCollisionEnter(Collision collision) {
+        List<PartInstance> collisionParts = new List<PartInstance>();
+        for (int y = 0; y < collision.contacts.Length; y++) {
+            for (int i = 0; i < Parts.Count; i++) {
+                for (int x = 0; x < Parts[i].transform.childCount; x++) {
+                    // If collision object is equal to the one we're currently looking at in the for loop
+                    if (collision.contacts[y].thisCollider.gameObject == Parts[i].transform.GetChild(x).gameObject) collisionParts.Add(Parts[i]);
+                }
+            }
+
+            // This code actually doesn't work
+            if (collision.contacts[y].otherCollider.transform.parent == null) continue;
+            if (collision.contacts[y].otherCollider.transform.parent.GetComponent<PartInstance>() == null) continue;
+            collisionParts.Add(collision.contacts[y].otherCollider.transform.parent.GetComponent<PartInstance>());
+        }
+
+        for (int i = 0; i < collisionParts.Count; i++) {
+            if (collisionParts[i].GetComponent<ExplosiveBehaviour>() == null) continue;
+            collisionParts[i].GetComponent<ExplosiveBehaviour>().ProcessChildCollision(collision);
+        }
+    }
+
     #endregion
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
 
     /* Scene-view gizmo: yellow cross at the centre-of-mass */
     private void OnDrawGizmosSelected() {
