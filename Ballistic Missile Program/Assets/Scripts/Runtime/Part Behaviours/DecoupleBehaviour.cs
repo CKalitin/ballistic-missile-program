@@ -16,12 +16,13 @@ public class DecoupleBehaviour : MonoBehaviour {
 
     public void Decouple() {
         PartInstance pi = GetComponent<PartInstance>();
-        VehicleInstance viParent = GetVehicleInstanceOfPart(pi);
+        VehicleInstance viParent = transform.root.GetComponent<VehicleInstance>();
+        if (viParent == null) Debug.LogWarning($"Vehicle Instance Parent Not Found. {gameObject}");
         Rigidbody rbParent = viParent.GetComponent<Rigidbody>();
 
+
         Vector3 contactPoint = transform.position;
-        Vector3 impulseDir = transform.up;
-        Debug.Log(impulseDir);
+        Vector3 impulseDir = transform.up; // Local up
 
         pi.Detach();
 
@@ -41,17 +42,5 @@ public class DecoupleBehaviour : MonoBehaviour {
             rbParent.AddForceAtPosition(impulseDir * decoupleImpulse, contactPoint, ForceMode.Impulse);
             rbChild.AddForceAtPosition(-impulseDir * decoupleImpulse, contactPoint, ForceMode.Impulse);
         }
-    }
-
-    private VehicleInstance GetVehicleInstanceOfPart(PartInstance pi) {
-        Transform parent = transform; // Start with current transform
-        while (parent.parent != null) {
-            parent = parent.parent;
-            if (parent.GetComponent<VehicleInstance>() != null) {
-                return parent.GetComponent<VehicleInstance>();
-            }
-        }
-        Debug.LogWarning($"Could not find Vehicle Instance of part {pi.name}. {pi.gameObject}");
-        return null;
     }
 }

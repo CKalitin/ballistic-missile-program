@@ -5,7 +5,16 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
+
+// Behaviours inherit this
+// "I" is a naming convention for interface like IEnumerable
+public interface IMassProvider {
+    float CurrentMass { get; }
+    event Action OnMassChanged; // Fire this whenever mass changes
+}
+
 
 [DisallowMultipleComponent]
 public class PartInstance : MonoBehaviour {
@@ -18,21 +27,36 @@ public class PartInstance : MonoBehaviour {
     [HideInInspector] public AttachNode childAttachNode; // null when not used
     private AttachNode[] _localAttachNodes;
 
+    private float totalMassKg;
+    private bool _massDirty = true;
+
     // Public read-only properties
-    public float CurrentMassKg => definition.dryMassKg;
+    public float CurrentMassKg => totalMassKg;
     public IReadOnlyList<AttachNode> LocalAttachNodes => _localAttachNodes; // IReadOnlyList is an interface in C#
 
-    // cached link to vehicle set in awake
-    private VehicleInstance _vehicle;
+    // cached links to scripts
+    private IMassProvider[] _massProviders;
+    private VehicleInstance _vehicleInstance;
 
     #endregion
 
     #region Unity Lifecycle Functions
 
     private void Awake() {
+        // Find vehicle instance in root parent
+        // This requires that the vehicle instance is on the root transform
+        _vehicleInstance = transform.root.GetComponent<VehicleInstance>();
+        if ( _vehicleInstance == null) Debug.LogWarning($"Vehicle Instance Parent Not Found. {gameObject}");
+
         _localAttachNodes = GetComponentsInChildren<AttachNode>(includeInactive: true);
         if (_localAttachNodes.Length <= 0 ) _localAttachNodes = new AttachNode[0];
-        _vehicle = GetComponentInParent<VehicleInstance>();
+
+        _massProviders = GetComponents<IMassProvider>();
+        for (int i = 0; i < _massProviders.Length; i++) _massProviders[i].OnMassChanged += () => _massDirty = true;
+    }
+
+    private void LateUpdate() {
+        if (_massDirty) RecalculateMass();
     }
 
     #endregion
@@ -64,7 +88,19 @@ public class PartInstance : MonoBehaviour {
 
     #endregion
 
-    #if UNITY_EDITOR
+    #region Private Functions
+
+    private void RecalculateMass() {
+        float total = definition.dryMassKg;
+        for (int i = 0; i < _massProviders.Length; i++) total += _massProviders[i].CurrentMass;
+        totalMassKg = total;
+        _massDirty = false;
+        _vehicleInstance.MarkMassDirty();
+    }
+
+    #endregion
+
+#if UNITY_EDITOR
     /* Gizmo: green wire cube showing part bounds when selected */
     private void OnDrawGizmosSelected() {
         var col = GetComponentInChildren<Collider>();

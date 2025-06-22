@@ -112,6 +112,7 @@ GameObject:
   m_Component:
   - component: {fileID: 345044744355639799}
   - component: {fileID: 140679725932443263}
+  - component: {fileID: 7357489835436659088}
   m_Layer: 0
   m_Name: Tank 2
   m_TagString: Untagged
@@ -153,6 +154,19 @@ MonoBehaviour:
   definition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
   parentAttachNode: {fileID: 0}
   childAttachNode: {fileID: 0}
+--- !u!114 &7357489835436659088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4249763676385479047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d5a49ef1b389946a5cfea896e95cab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuelMass: 100
 --- !u!1 &7605534665305259252
 GameObject:
   m_ObjectHideFlags: 0
