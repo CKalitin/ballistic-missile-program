@@ -39,11 +39,13 @@ public class PartInstance : MonoBehaviour {
     #region API
 
     // Attach this part to a parent node (called by builder/decoupler).
-    public void AttachTo(AttachNode parentNode) {
+    // Child node is the one used on this part
+    public void AttachTo(AttachNode parentNode, AttachNode childNode) {
         parentAttachPoint = parentNode;
         parentNode.CurrentOccupant = this;
+        childNode.CurrentOccupant = this;
         transform.SetParent(parentNode.transform, worldPositionStays: false);
-        transform.SetLocalPositionAndRotation(Vector3.zero-new Vector3(0,-2,0), Quaternion.identity); // Local position and rotation
+        transform.SetLocalPositionAndRotation(-childNode.transform.localPosition, Quaternion.identity); // Local position and rotation
     }
 
     // Detach from current parent node (if any).

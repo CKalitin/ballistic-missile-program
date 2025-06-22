@@ -58,7 +58,7 @@ public class VehicleInstance : MonoBehaviour {
             worldCoM = mass * Parts[i].transform.position;
         }
 
-        if (totalMass <= 0f) totalMass = 1f;
+        if (totalMass <= 0f) totalMass = 1f; // Avoid NaN values
 
         worldCoM /= totalMass; // Normalize for vehicle mass
 
@@ -78,9 +78,11 @@ public class VehicleInstance : MonoBehaviour {
 
         Gizmos.color = Color.yellow;
         Vector3 com = transform.TransformPoint(_rb.centerOfMass);
-        Gizmos.DrawLine(com - Vector3.up * 0.2f, com + Vector3.up * 0.2f);
-        Gizmos.DrawLine(com - Vector3.right * 0.2f, com + Vector3.right * 0.2f);
-        Gizmos.DrawLine(com - Vector3.forward * 0.2f, com + Vector3.forward * 0.2f);
+
+        float scale = 0.5f;
+        Gizmos.DrawLine(com - Vector3.up * scale, com + Vector3.up * scale);
+        Gizmos.DrawLine(com - Vector3.right * scale, com + Vector3.right * scale);
+        Gizmos.DrawLine(com - Vector3.forward * scale, com + Vector3.forward * scale);
     }
     #endif
 }

@@ -31,10 +31,13 @@ public class VehicleSpawner :MonoBehaviour {
             PartInstance childPI = partInstances[i];
             PartInstance parentPI = partInstances[pe.parentIndex];
 
-            int attachNodeIndex = GetAttachNodeIndexFromID(parentPI, pe.ParentAttachNodeID);
-            AttachNode parentAttachNode = parentPI.LocalAttachNodes[attachNodeIndex];
+            int parentAttachNodeIndex = GetAttachNodeIndexFromID(parentPI, pe.ParentAttachNodeID);
+            AttachNode parentAttachNode = parentPI.LocalAttachNodes[parentAttachNodeIndex];
 
-            childPI.AttachTo(parentAttachNode);
+            int childAttachNodeIndex = GetAttachNodeIndexFromID(childPI, pe.ChildAttachNodeID);
+            AttachNode childAttachNode = childPI.LocalAttachNodes[childAttachNodeIndex];
+
+            childPI.AttachTo(parentAttachNode, childAttachNode);
         }
 
         vehicle.MarkMassDirty();

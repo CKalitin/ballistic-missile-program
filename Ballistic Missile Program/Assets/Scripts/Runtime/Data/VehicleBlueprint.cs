@@ -20,11 +20,14 @@ public struct PartEntry {
     public int parentIndex;
     [Space]
     public string ParentAttachNodeID;
+    [Tooltip("The node ID on THIS part that is attached to the parent.")]
+    public string ChildAttachNodeID;
 
-    public PartEntry(PartDefinition _partDefinition, int _parentIndex = -1, string _parentAttachNodeID = "") {
+    public PartEntry(PartDefinition _partDefinition, int _parentIndex = -1, string _parentAttachNodeID = "", string _childAttachNodeID = "") {
         PartDefinition = _partDefinition;
         parentIndex = _parentIndex;
         ParentAttachNodeID = _parentAttachNodeID;
+        ChildAttachNodeID = _childAttachNodeID;
     }
 }
 

@@ -19,9 +19,12 @@ MonoBehaviour:
   - PartDefinition: {fileID: 11400000, guid: c8222536eb6ea6242bf29f15ce65f570, type: 2}
     parentIndex: -1
     ParentAttachNodeID: 
+    ChildAttachNodeID: 
   - PartDefinition: {fileID: 11400000, guid: bccbea19adf9733449d55bdf0380065d, type: 2}
     parentIndex: 0
     ParentAttachNodeID: Lower
+    ChildAttachNodeID: Upper
   - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
     parentIndex: 1
     ParentAttachNodeID: Lower
+    ChildAttachNodeID: Upper
