@@ -6,6 +6,7 @@ using UnityEngine;
 public class EngineDefinition : PartBehaviourDefinition {
     public float maxThrustNewtons;
     public Vector2 maxGimbalAngles;
+    public float maxGimalPerSecond;
 
     public override float GetMassContribution() => 0f;
 }

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Engine 1
   m_EditorClassIdentifier: 
   maxThrustNewtons: 45000
-  maxGimbalAngles: {x: 15, y: 15}
+  maxGimbalAngles: {x: 25, y: 25}
+  maxGimalPerSecond: 100

@@ -21,7 +21,7 @@ public class VehicleSpawner :MonoBehaviour {
         GameObject rootGO = GameObject.Instantiate(defaultVehiclePrefab, position, rotation);
         if (parent) rootGO.transform.SetParent(parent, worldPositionStays: true); // Keep same world space position and different local position, worldPositionStays
 
-        VehicleInstance vehicle = rootGO.AddComponent<VehicleInstance>();
+        VehicleInstance vehicle = rootGO.GetComponent<VehicleInstance>();
 
         List<PartInstance> partInstances = new List<PartInstance>(bp.parts.Count);
 
@@ -62,7 +62,7 @@ public class VehicleSpawner :MonoBehaviour {
 
         GameObject rootGO = GameObject.Instantiate(defaultVehiclePrefab, t.position, t.rotation);
 
-        VehicleInstance vehicle = rootGO.AddComponent<VehicleInstance>();
+        VehicleInstance vehicle = rootGO.GetComponent<VehicleInstance>();
 
         t.SetParent(rootGO.transform, worldPositionStays: true);
 

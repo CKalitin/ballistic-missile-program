@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour {
 
     private Camera _cam;
     private Vector3 _pivot;       // Point we’re looking at (Free)
-    private float _distance;    // Camera-to-pivot distance
+    private float _distance = 25;    // Camera-to-pivot distance
     private float _yaw;         // Yaw & pitch around pivot (Free)
     private float _pitch;
 
@@ -68,7 +68,7 @@ public class CameraController : MonoBehaviour {
         EnterFreeMode();
     }
 
-    void FixedUpdate() {
+    private void LateUpdate() {
         HandleVehiclePicking();
 
         HandleModeSwitching();
@@ -77,13 +77,18 @@ public class CameraController : MonoBehaviour {
         else UpdateFollow();
     }
 
+    private void FixedUpdate() {
+        // Follow in fixed update bc phyiscs
+        if (_mode != Mode.Free) return;
+        if (target == null) return;
+        _pivot = target.worldCoM;
+    }
+
     #endregion
 
     #region Camera Updates
 
     void UpdateFree() {
-        if (target != null) _pivot = target.worldCoM;
-
         /* —— (1) re-seed when either button goes down —— */
         if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
             _prevMousePos = Input.mousePosition;

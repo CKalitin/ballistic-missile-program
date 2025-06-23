@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +6,13 @@ public class EngineBehaviour : MonoBehaviour {
     public EngineDefinition def;
 
     [Range(0f, 1f)]
-    public float throttle = 0f;
+    public float Throttle = 0f;
 
-    public Vector2 gimbalAngles;
+    public Vector2 TargetGimbalAngles;
+
+    public Transform rotateObject;
+
+    private Vector2 _currentGimbalAngles;
 
     Rigidbody _rb; // Cached reference
 
@@ -19,13 +23,28 @@ public class EngineBehaviour : MonoBehaviour {
     private void FixedUpdate() {
         _rb = transform.root.GetComponent<Rigidbody>(); // If we get a new parent
 
-        float thrust = throttle * def.maxThrustNewtons;
-        _rb.AddForceAtPosition(transform.up * thrust, transform.position, ForceMode.Force);
+        float thrust = Throttle * def.maxThrustNewtons;
+        _rb.AddForceAtPosition(rotateObject.up * thrust,
+                               transform.position,
+                               ForceMode.Force);
 
-        // Todo: drain fuel
+        // Fuel-drain (TODO)
 
-        Vector2 applyGimbal = new Vector2(Mathf.Min(gimbalAngles.x, def.maxGimbalAngles.x), Mathf.Min(gimbalAngles.y, def.maxGimbalAngles.y));
+        // Gimbal with rate-limit
+        Vector2 target = new Vector2(
+            Mathf.Clamp(TargetGimbalAngles.x, -def.maxGimbalAngles.x, def.maxGimbalAngles.x),
+            Mathf.Clamp(TargetGimbalAngles.y, -def.maxGimbalAngles.y, def.maxGimbalAngles.y)
+        );
 
-        transform.localRotation = Quaternion.Euler(applyGimbal.y, 0f, -applyGimbal.x);
+        // (b) Compute the max step size this frame
+        float step = def.maxGimalPerSecond * Time.fixedDeltaTime;
+
+        // (c) Move current toward target, axis-wise
+        _currentGimbalAngles.x = Mathf.MoveTowards(_currentGimbalAngles.x, target.x, step);
+        _currentGimbalAngles.y = Mathf.MoveTowards(_currentGimbalAngles.y, target.y, step);
+
+        // (d) Apply to the nozzle ‒ note axis mapping
+        rotateObject.localRotation =
+            Quaternion.Euler(_currentGimbalAngles.y, 0f, -_currentGimbalAngles.x);
     }
 }
