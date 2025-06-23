@@ -24,19 +24,27 @@ MonoBehaviour:
     parentIndex: 0
     ParentAttachNodeID: Lower
     ChildAttachNodeID: Upper
-  - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
+  - PartDefinition: {fileID: 11400000, guid: c8222536eb6ea6242bf29f15ce65f570, type: 2}
     parentIndex: 1
     ParentAttachNodeID: Lower
     ChildAttachNodeID: Upper
-  - PartDefinition: {fileID: 11400000, guid: 905bad57c3f75d549b760d636a29d469, type: 2}
-    parentIndex: 0
-    ParentAttachNodeID: Side
-    ChildAttachNodeID: Lower
-  - PartDefinition: {fileID: 11400000, guid: 49770a33d210e304c96ecf1d505cb0b7, type: 2}
-    parentIndex: 3
-    ParentAttachNodeID: Upper
-    ChildAttachNodeID: Lower
   - PartDefinition: {fileID: 11400000, guid: cedc2c7de9c3e0c4090c81dfa712bd26, type: 2}
     parentIndex: 2
     ParentAttachNodeID: Lower
     ChildAttachNodeID: Upper
+  - PartDefinition: {fileID: 11400000, guid: 4d6c799e929f9644ab7db8f3f1cc58c6, type: 2}
+    parentIndex: 2
+    ParentAttachNodeID: Left
+    ChildAttachNodeID: Side
+  - PartDefinition: {fileID: 11400000, guid: 4d6c799e929f9644ab7db8f3f1cc58c6, type: 2}
+    parentIndex: 2
+    ParentAttachNodeID: Right
+    ChildAttachNodeID: Side
+  - PartDefinition: {fileID: 11400000, guid: 4d6c799e929f9644ab7db8f3f1cc58c6, type: 2}
+    parentIndex: 2
+    ParentAttachNodeID: Out
+    ChildAttachNodeID: Side
+  - PartDefinition: {fileID: 11400000, guid: 4d6c799e929f9644ab7db8f3f1cc58c6, type: 2}
+    parentIndex: 2
+    ParentAttachNodeID: In
+    ChildAttachNodeID: Side

@@ -68,7 +68,7 @@ public class CameraController : MonoBehaviour {
         EnterFreeMode();
     }
 
-    void LateUpdate() {
+    void FixedUpdate() {
         HandleVehiclePicking();
 
         HandleModeSwitching();
@@ -82,6 +82,8 @@ public class CameraController : MonoBehaviour {
     #region Camera Updates
 
     void UpdateFree() {
+        if (target != null) _pivot = target.worldCoM;
+
         /* —— (1) re-seed when either button goes down —— */
         if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
             _prevMousePos = Input.mousePosition;
@@ -99,6 +101,8 @@ public class CameraController : MonoBehaviour {
 
             // (b) MMB → pan
             if (Input.GetMouseButton(2)) {
+                target = null;
+
                 Vector3 right = transform.right;
                 Vector3 up = transform.up;
 

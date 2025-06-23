@@ -10,6 +10,7 @@ public enum PartCategory {
     Engine = 1 << 0,    // 0001
     Tank = 1 << 1,      // 0010
     Decoupler = 1 << 2, // 0100
+    AeroSurface = 1 << 3, // 1000
 }
 
 [CreateAssetMenu(menuName = "BallisticMissileProgram/Part Definition")]

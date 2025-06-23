@@ -26,7 +26,7 @@ public class ExplosiveBehaviour : MonoBehaviour {
             PartInstance childPI = pi.LocalAttachNodes[i].CurrentOccupant;
             childPI.Detach();
 
-            VehicleInstance childVI = FindObjectOfType<VehicleSpawner>().MakeNewParent(childPI);
+            VehicleInstance childVI = VehicleSpawner.instance.MakeNewParent(childPI);
 
             Rigidbody childRB = childVI.GetComponent<Rigidbody>();
             childRB.velocity = rb.velocity;

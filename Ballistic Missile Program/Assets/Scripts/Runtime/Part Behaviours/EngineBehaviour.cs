@@ -20,7 +20,7 @@ public class EngineBehaviour : MonoBehaviour {
         _rb = transform.root.GetComponent<Rigidbody>(); // If we get a new parent
 
         float thrust = throttle * def.maxThrustNewtons;
-        _rb.AddForce(transform.up * thrust, ForceMode.Force);
+        _rb.AddForceAtPosition(transform.up * thrust, transform.position, ForceMode.Force);
 
         // Todo: drain fuel
 

@@ -33,7 +33,7 @@ public class DecoupleBehaviour : MonoBehaviour {
 
         pi.Detach();
 
-        VehicleInstance viChild = FindObjectOfType<VehicleSpawner>().MakeNewParent(pi);
+        VehicleInstance viChild = VehicleSpawner.instance.MakeNewParent(pi);
         Rigidbody rbChild = viChild.GetComponent<Rigidbody>();
 
         viParent.UpdateParts();

@@ -5,16 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
-
-// Behaviours inherit this
-// "I" is a naming convention for interface like IEnumerable
-public interface IMassProvider {
-    float CurrentMass { get; }
-    event Action OnMassChanged; // Fire this whenever mass changes
-}
-
 
 [DisallowMultipleComponent]
 public class PartInstance : MonoBehaviour {
@@ -33,6 +24,7 @@ public class PartInstance : MonoBehaviour {
     // Public read-only properties
     public float CurrentMassKg => totalMassKg;
     public IReadOnlyList<AttachNode> LocalAttachNodes => _localAttachNodes; // IReadOnlyList is an interface in C#
+    public float Altitude => transform.position.y;
 
     // cached links to scripts
     private IMassProvider[] _massProviders;

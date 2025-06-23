@@ -5,7 +5,17 @@ using UnityEngine.UIElements;
 
 /// Static helper that turns a VehicleBlueprint into a ready-to-fly VehicleInstance.
 public class VehicleSpawner :MonoBehaviour {
+    public static VehicleSpawner instance;
+
     [SerializeField] private GameObject defaultVehiclePrefab;
+
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        } else {
+            Debug.LogWarning("Multiple Vehicle Spawners");
+        }
+    }
 
     public VehicleInstance Build(VehicleBlueprint bp, Vector3 position, Quaternion rotation, Transform parent = null) {
         GameObject rootGO = GameObject.Instantiate(defaultVehiclePrefab, position, rotation);
