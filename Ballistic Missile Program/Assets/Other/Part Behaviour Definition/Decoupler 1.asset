@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fb2518e08bbc4f98b38e4beb48c5c, type: 3}
   m_Name: Decoupler 1
   m_EditorClassIdentifier: 
-  DecoupleImpulse: 3000
+  DecoupleImpulse: 1000

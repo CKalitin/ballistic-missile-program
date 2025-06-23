@@ -37,6 +37,8 @@ public class VehicleSpawner :MonoBehaviour {
             childPI.AttachTo(parentAttachNode, childAttachNode);
         }
 
+        SetLayerRecursively(rootGO.transform, LayerMask.NameToLayer("Vehicle"));
+
         vehicle.UpdateParts();
         vehicle.MarkMassDirty();
         vehicle.RecalculateMass();
@@ -54,6 +56,8 @@ public class VehicleSpawner :MonoBehaviour {
 
         t.SetParent(rootGO.transform, worldPositionStays: true);
 
+        SetLayerRecursively(rootGO.transform, LayerMask.NameToLayer("Vehicle"));
+
         return vehicle;
     }
 
@@ -68,5 +72,12 @@ public class VehicleSpawner :MonoBehaviour {
         }
         Debug.LogWarning($"Could not find Attach Node {id} on {pi.name}. GameObject: {pi.gameObject}");
         return 0;
+    }
+
+    private static void SetLayerRecursively(Transform t, int layer) {
+        t.gameObject.layer = layer;
+        for (int i = 0; i < t.childCount; i++) {
+            SetLayerRecursively(t.GetChild(i), layer);
+        }
     }
 }

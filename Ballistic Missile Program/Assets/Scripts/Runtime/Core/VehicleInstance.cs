@@ -18,6 +18,8 @@ public class VehicleInstance : MonoBehaviour {
 
     [HideInInspector] public List<PartInstance> Parts = new List<PartInstance>();
 
+    [HideInInspector] public Vector3 worldCoM = Vector3.zero;
+
     private Rigidbody _rb;
     private bool _massDirty = true; // recalc in first LateUpdate
 
@@ -57,7 +59,7 @@ public class VehicleInstance : MonoBehaviour {
 
     public void RecalculateMass() {
         float totalMass = 0f;
-        Vector3 worldCoM = Vector3.zero;
+        worldCoM = Vector3.zero;
 
         for (int i = 0; i < Parts.Count; i++) {
             float mass = Parts[i].CurrentMassKg;
